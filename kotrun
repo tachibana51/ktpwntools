@@ -1,0 +1,7 @@
+if [ $# -ne 1 ];then
+	echo "$0 ktfile";
+	exit 1
+fi
+kotlinc *.kt -include-runtime -d $1.jar -cp .
+kotlin $1.jar
+rm $1.jar
