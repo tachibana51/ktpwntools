@@ -1,4 +1,4 @@
-import douro.pwnpack.*
+package douro.pwnpack
 import java.lang.ProcessBuilder
 import java.io.*
 import java.nio.charset.*
