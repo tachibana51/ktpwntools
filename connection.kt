@@ -50,31 +50,41 @@ interface LinkIO {
 		logger.clear("received")
 		return result
 	}
+
 	fun recvAll() : ByteArray{
-		val buf : ByteArray = ByteArray(1)
-		do{
-			val result = this.inputStream.read(buf, 0, 1)
-			logger.printByteHex(buf.last(),8)
-		}while(this.inputStream.available() > 0)
-		logger.clear("received")
+		var buf : ByteArray = ByteArray(0)
+		TimeUnit.MILLISECONDS.sleep(500)
+		while(this.inputStream.available() > 0){
+			buf += this.recv()
+			TimeUnit.MILLISECONDS.sleep(500)
+		}
 		return buf
 	}
+
 	fun isAlive() : Boolean
+
 	fun interactive(){
 		val reader = BufferedReader(InputStreamReader(System.`in`),4028)
 		var len:Int = 0
 		var buf = ""
+		var count = 0
 		val reloadBuf = ByteArray(1024)
 		while(this.isAlive()){
-			if(this.inputStream.available() <= 0){
-				TimeUnit.SECONDS.sleep(1)
+			var timeout = 3000
+			this.sendLine(buf.b())
+			if(buf.contains("cd")){
+				timeout = 500
 			}
+			while(this.inputStream.available() <= 0 && count < timeout) {
+				TimeUnit.MILLISECONDS.sleep(500)
+				count += 500
+			}
+			count = 0
 			val mes = this.recv().toString(charset)
 			println(mes)
 			System.out.flush()
 			print("\u001B[32m$\u001B[0m")
 			buf = reader.readLine().toString()
-			this.sendLine(buf.b())
 		}
 	}
 }
