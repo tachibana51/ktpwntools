@@ -131,8 +131,8 @@ def print_can_push_to_pop():
 
 def genarate_rop_code(code ,popnum, offset,address, operand):
         val = "_".join([i.replace(";", "").strip().replace(" ", "_") for i in re.findall(r"pop [^;]+;", code)])
-        print(val + " = 0x" + address)
-        print("")
+        print(" \033[93m" + val + " = 0x" + address)
+        print("\033[0m ")
         buf = str("buf += p64(" + val)
         buf += ")\n"
         for i in range(popnum):
@@ -142,6 +142,7 @@ def genarate_rop_code(code ,popnum, offset,address, operand):
             else:
                 buf +=str("buf += p64(dummy")
                 buf += ")\n"
+        print("\n")
         return buf
 
 argc = len(sys.argv)
@@ -157,7 +158,6 @@ for pop in pop_list:                #pop code[0], ope, popnum, i, address
     print(pop[0])
     print("")
     buf = genarate_rop_code(pop[0],pop[2],pop[3],pop[4],pop[1])
-    print(buf)
 print("")
 print("pop chain")
 print_can_pop_to_mov()
